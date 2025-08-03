@@ -19,14 +19,20 @@ export const sendEmail = async ({
     // TODO: Configure Mail for usage
 
     if (emailType === "VERIFY") {
-      await User.findByIdAndUpdate(userId, {
-        verifyToken: hashedToken,
+      const updateUser = await User.findByIdAndUpdate(userId, {
+        $set: {
+          verifyToken: hashedToken,
         verifyTokenExpiry: Date.now() + 3600000,
+        }
       });
+
+      console.log("Updated User for verify", updateUser);
     } else if (emailType === "RESET") {
       await User.findByIdAndUpdate(userId, {
-        forgotPasswordToken: hashedToken,
+        $set: {
+          forgotPasswordToken: hashedToken,
         forgotPasswordTokenExpiry: Date.now() + 3600000,
+        }
       });
     }
 
